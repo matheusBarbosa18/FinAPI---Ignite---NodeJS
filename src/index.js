@@ -72,6 +72,17 @@ app.post('/withdraw', verifyIfExistAccountCpf, (request, response) => {
     return response.status(201).send()
 })
 
+app.get('/statement/date', verifyIfExistAccountCpf, (request, response) => {
+    const { customer } = request
+    const { date } = request.query
+
+    const statement = customer.statement.filter(statement =>
+        statement.created_at.toISOString().includes(date)
+    )
+
+    return response.json(statement)
+})
+
 
 
 console.log('servidor rodando')
