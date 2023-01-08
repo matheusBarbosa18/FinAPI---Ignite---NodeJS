@@ -98,6 +98,24 @@ app.get('/account', verifyIfExistAccountCpf, (request, response) => {
     return response.json(customer)
 })
 
+app.delete('/account', verifyIfExistAccountCpf, (request, response) => {
+    const { customer } = request
+
+    const indexCustomer = customers.indexOf(customer)
+
+    customers.splice(indexCustomer, 1)
+
+    return response.status(200).json(customers)
+})
+
+app.get('/balance', verifyIfExistAccountCpf, (request, response) => {
+    const { customer } = request
+
+    const balance = getBalance(customer.statement)
+
+    return response.json(balance)
+})
+
 console.log('servidor rodando')
 app.listen(3333);
 
