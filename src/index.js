@@ -83,7 +83,20 @@ app.get('/statement/date', verifyIfExistAccountCpf, (request, response) => {
     return response.json(statement)
 })
 
+app.put('/account', verifyIfExistAccountCpf, (request, response) => {
+    const { name } = request.body
+    const { customer } = request
 
+    customer.name = name
+
+    return response.status(201).send()
+})
+
+app.get('/account', verifyIfExistAccountCpf, (request, response) => {
+    const { customer } = request
+
+    return response.json(customer)
+})
 
 console.log('servidor rodando')
 app.listen(3333);
