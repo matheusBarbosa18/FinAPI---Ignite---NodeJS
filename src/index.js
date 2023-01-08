@@ -39,6 +39,17 @@ app.get('/statement', verifyIfExistAccountCpf, (request, response) => {
     return response.json(custormer.statement)
 })
 
+app.post('/deposit', verifyIfExistAccountCpf, (request, response) => {
+    const { description, amount } = request.body;
+    const { custormer } = request;
+    const statementOperation = {
+        description, amount, created_at: new Date(), type: 'credit'
+    }
+
+    custormer.statement.push(statementOperation)
+    return response.status(201).send();
+})
+
 
 
 console.log('servidor rodando')
