@@ -4,7 +4,21 @@ const app = express();
 const custormes = [];
 
 app.use(express.json());
-app.post('/account', function (request, response) {
+
+//middleware
+function verifyIfExistAccountCpf(request, response, next) {
+    const { cpf } = request.headers;
+    const custormer = custormes.find((custormer) => custormer.cpf == cpf);
+
+    if (!custormer) {
+        return response.status(400).json({ status: 'custormer is not found!' })
+    }
+    request.custormer = custormer;
+    return next();
+
+}
+
+app.post('/account', (request, response) => {
     const { cpf, name } = request.body;
     const cpfExistente = custormes.some((custormes) => custormes.cpf === cpf);
 
@@ -19,14 +33,9 @@ app.post('/account', function (request, response) {
     return response.status(201).send()
 })
 
-app.get('/statement', function (request, response) {
-    const { cpf } = request.headers;
-    const custormer = custormes.find((custormer) => custormer.cpf == cpf);
+app.get('/statement', verifyIfExistAccountCpf, (request, response) => {
 
-    if (!custormer) {
-        return response.status(400).json({ status: 'custormer is not found!' })
-    }
-
+    const { custormer } = request;
     return response.json(custormer.statement)
 })
 
