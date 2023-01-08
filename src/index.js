@@ -18,6 +18,13 @@ app.post('/account', function (request, response) {
     // yarn add uuid
 
 })
+
+app.get('/statement/:cpf', function (request, response) {
+    const { cpf } = request.params;
+    const custormer = custormes.find((custormer) => custormer.cpf == cpf);
+    return response.json(custormer.statement)
+})
+
 console.log('servidor rodando')
 app.listen(3333);
 
